@@ -1,5 +1,6 @@
 package the_fireplace.grandexchange;
 
+import net.minecraft.entity.passive.EntityTurtle;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -27,11 +28,13 @@ public final class TurtleShellDrop {
     }
 
     @SubscribeEvent
-    public void livingDrops(LivingDeathEvent event) {
+    public void libingDeath(LivingDeathEvent event) {
         if(!event.getEntityLiving().getEntityWorld().isRemote())
-            if(cfg.dropWhenKilledByPlayer || !(event.getSource().getTrueSource() instanceof EntityPlayer))
-                if(rand.nextDouble() <= cfg.shellDropChance)
-                    event.getEntity().entityDropItem(new ItemStack(Items.TURTLE_HELMET));
+            if(event.getEntityLiving() instanceof EntityTurtle)
+                if(cfg.dropWhenKilledByPlayer || !(event.getSource().getTrueSource() instanceof EntityPlayer))
+                    if(cfg.babyTurtleDrops || !event.getEntityLiving().isChild())
+                        if(rand.nextDouble() <= cfg.shellDropChance)
+                            event.getEntity().entityDropItem(new ItemStack(cfg.dropScute ? Items.SCUTE : Items.TURTLE_HELMET));
     }
 
     public void serverConfig(ModConfig.ModConfigEvent event) {
@@ -49,15 +52,21 @@ public final class TurtleShellDrop {
         }
         public static double shellDropChance;
         public static boolean dropWhenKilledByPlayer;
+        public static boolean dropScute;
+        public static boolean babyTurtleDrops;
 
         public static void load() {
             shellDropChance = SERVER.shellDropChance.get();
             dropWhenKilledByPlayer = SERVER.dropWhenKilledByPlayer.get();
+            dropScute = SERVER.dropScute.get();
+            babyTurtleDrops = SERVER.babyTurtleDrops.get();
         }
 
         public static class ServerConfig {
             public ForgeConfigSpec.DoubleValue shellDropChance;
             public ForgeConfigSpec.BooleanValue dropWhenKilledByPlayer;
+            public ForgeConfigSpec.BooleanValue dropScute;
+            public ForgeConfigSpec.BooleanValue babyTurtleDrops;
 
             ServerConfig(ForgeConfigSpec.Builder builder) {
                 builder.push("general");
@@ -69,6 +78,14 @@ public final class TurtleShellDrop {
                         .comment("Whether or not the shell drops when the turtle is killed directly by the player.")
                         .translation("Shell Drop When Killed")
                         .define("dropWhenKilledByPlayer", false);
+                dropScute = builder
+                        .comment("Drop Scutes instead of Shells.")
+                        .translation("Drop Scutes")
+                        .define("dropScute", true);
+                babyTurtleDrops = builder
+                        .comment("Allow drops from dead baby turtles.")
+                        .translation("Baby Turtle Drops")
+                        .define("babyTurtleDrops", false);
                 builder.pop();
             }
         }

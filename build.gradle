@@ -23,7 +23,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'net.cazzar.gradle.modsio'
 
-version = "1.0.0"
+version = "1.0.1"
 group = "the_fireplace.turtleshelldrop"
 archivesBaseName = "TurtleShellDrop-1.13.2"
 

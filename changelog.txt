@@ -1,1 +1,2 @@
-Initial Release
+Fixed all entities dropping turtle shells
+Added two new config options: Drop Scute and Baby Turtle Drops
