@@ -106,7 +106,7 @@ modsIO {
     key = project.hasProperty("modsioApiKey")? project.modsioApiKey : "empty"
     project{
 		artifact = new File(jar.destinationDir, archivesBaseName+"-"+version+".jar")
-		modid = "0000"
+		modid = "1281"
 		minecraft = "1.13.2"
 		try{changelog = file('changelog.txt').text}catch(Exception e){changelog=""}
 		tag = "alpha"
