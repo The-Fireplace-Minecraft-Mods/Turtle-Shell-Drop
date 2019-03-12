@@ -28,7 +28,7 @@ public final class TurtleShellDrop {
     }
 
     @SubscribeEvent
-    public void libingDeath(LivingDeathEvent event) {
+    public void livingDeath(LivingDeathEvent event) {
         if(!event.getEntityLiving().getEntityWorld().isRemote())
             if(event.getEntityLiving() instanceof EntityTurtle)
                 if(cfg.dropWhenKilledByPlayer || !(event.getSource().getTrueSource() instanceof EntityPlayer))
