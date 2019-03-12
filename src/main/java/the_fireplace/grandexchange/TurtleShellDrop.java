@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Random;
@@ -22,6 +23,7 @@ public final class TurtleShellDrop {
     public TurtleShellDrop() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, cfg.SERVER_SPEC);
         MinecraftForge.EVENT_BUS.register(this);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverConfig);
     }
 
     @SubscribeEvent
@@ -30,6 +32,11 @@ public final class TurtleShellDrop {
             if(cfg.dropWhenKilledByPlayer || !(event.getSource().getTrueSource() instanceof EntityPlayer))
                 if(rand.nextDouble() <= cfg.shellDropChance)
                     event.getEntity().entityDropItem(new ItemStack(Items.TURTLE_HELMET));
+    }
+
+    public void serverConfig(ModConfig.ModConfigEvent event) {
+        if (event.getConfig().getType() == ModConfig.Type.SERVER)
+            cfg.load();
     }
 
     public static class cfg {
