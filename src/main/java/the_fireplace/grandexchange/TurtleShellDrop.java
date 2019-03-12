@@ -16,6 +16,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Random;
 
+@SuppressWarnings("WeakerAccess")
 @Mod(TurtleShellDrop.MODID)
 public final class TurtleShellDrop {
     public static final String MODID = "turtleshelldrop";
