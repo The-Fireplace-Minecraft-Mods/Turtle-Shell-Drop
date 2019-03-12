@@ -1,0 +1,115 @@
+buildscript {
+    repositories {
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "Modmuss50"
+            url = "http://maven.modmuss50.me/"
+        }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath 'ModsIOUpload:ModsIOUpload:+'
+    }
+}
+
+plugins {
+    id "com.matthewprenger.cursegradle" version "1.2.0"
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'net.cazzar.gradle.modsio'
+
+version = "1.0.0"
+group = "the_fireplace.turtleshelldrop"
+archivesBaseName = "TurtleShellDrop-1.13.2"
+
+allprojects {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+minecraft {
+    mappings channel: 'stable', version: '43-1.13'
+    
+    runs {
+        client = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+        server = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'info'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+    }
+}
+
+repositories {
+}
+
+dependencies {
+	minecraft 'net.minecraftforge:forge:1.13.2-25.0.60'
+}
+
+jar {
+    manifest {
+        attributes(["Specification-Title": "turtleshelldrop",
+                    "Specification-Vendor": "The_Fireplace",
+                    "Specification-Version": "24.0", // We are version 1 of the modlauncher specification
+                    "Implementation-Title": "Turtle Shell Drop",
+                    "Implementation-Version": "${version}",
+                    "Implementation-Vendor" : "The_Fireplace",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
+    }
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+artifacts {
+    archives jar
+    archives deobfJar
+}
+
+curseforge {
+  apiKey = project.hasProperty("curseForgeApiKey")? project.curseForgeApiKey : "empty"
+  project {
+    id = '000000'
+    changelog = file('changelog.txt')
+    releaseType = 'release'
+    addGameVersion '1.13.2'
+	addGameVersion 'Java 8'
+    mainArtifact(jar) {
+        displayName = jar.archiveName.replace(".jar", "")
+    }
+    addArtifact(deobfJar) {
+        displayName = deobfJar.archiveName.replace(".jar", "")
+        changelog = "*This is a file for mod developers. If you don't know what to do with it, don't use it!*"
+    }
+  }
+}
+
+modsIO {
+    key = project.hasProperty("modsioApiKey")? project.modsioApiKey : "empty"
+    project{
+		artifact = new File(jar.destinationDir, archivesBaseName+"-"+version+".jar")
+		modid = "0000"
+		minecraft = "1.13.2"
+		try{changelog = file('changelog.txt').text}catch(Exception e){changelog=""}
+		tag = "alpha"
+		current = true
+    }
+}

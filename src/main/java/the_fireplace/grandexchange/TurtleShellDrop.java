@@ -1,0 +1,70 @@
+package the_fireplace.grandexchange;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Random;
+
+@Mod(TurtleShellDrop.MODID)
+public final class TurtleShellDrop {
+    public static final String MODID = "turtleshelldrop";
+    public static final Random rand = new Random();
+
+    public TurtleShellDrop() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, cfg.SERVER_SPEC);
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public void livingDrops(LivingDeathEvent event) {
+        if(!event.getEntityLiving().getEntityWorld().isRemote())
+            if(cfg.dropWhenKilledByPlayer || !(event.getSource().getTrueSource() instanceof EntityPlayer))
+                if(rand.nextDouble() <= cfg.shellDropChance)
+                    event.getEntity().entityDropItem(new ItemStack(Items.TURTLE_HELMET));
+    }
+
+    public static class cfg {
+        public static final ServerConfig SERVER;
+        public static final ForgeConfigSpec SERVER_SPEC;
+        static {
+            final Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
+            SERVER_SPEC = specPair.getRight();
+            SERVER = specPair.getLeft();
+        }
+        public static double shellDropChance;
+        public static boolean dropWhenKilledByPlayer;
+
+        public static void load() {
+            shellDropChance = SERVER.shellDropChance.get();
+            dropWhenKilledByPlayer = SERVER.dropWhenKilledByPlayer.get();
+        }
+
+        public static class ServerConfig {
+            public ForgeConfigSpec.DoubleValue shellDropChance;
+            public ForgeConfigSpec.BooleanValue dropWhenKilledByPlayer;
+
+            ServerConfig(ForgeConfigSpec.Builder builder) {
+                builder.push("general");
+                shellDropChance = builder
+                        .comment("Chance that a turtle shell will drop when a turtle is killed.")
+                        .translation("Shell Drop Chance")
+                        .defineInRange("shellDropChance", 0.5D, 0, 1);
+                dropWhenKilledByPlayer = builder
+                        .comment("Whether or not the shell drops when the turtle is killed directly by the player.")
+                        .translation("Shell Drop When Killed")
+                        .define("dropWhenKilledByPlayer", false);
+                builder.pop();
+            }
+        }
+    }
+
+}
