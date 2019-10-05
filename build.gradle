@@ -18,14 +18,14 @@ buildscript {
 }
 
 plugins {
-    id "com.matthewprenger.cursegradle" version "1.2.0"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'net.cazzar.gradle.modsio'
 
 version = "1.0.1"
 group = "the_fireplace.turtleshelldrop"
-archivesBaseName = "TurtleShellDrop-1.13.2"
+archivesBaseName = "TurtleShellDrop-1.14.4"
 
 allprojects {
     sourceCompatibility = 1.8
@@ -33,7 +33,7 @@ allprojects {
 }
 
 minecraft {
-    mappings channel: 'stable', version: '43-1.13'
+    mappings channel: 'stable', version: '53-1.14.2'
     
     runs {
         client = {
@@ -59,14 +59,14 @@ repositories {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.13.2-25.0.60'
+	minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
 }
 
 jar {
     manifest {
         attributes(["Specification-Title": "turtleshelldrop",
                     "Specification-Vendor": "The_Fireplace",
-                    "Specification-Version": "24.0", // We are version 1 of the modlauncher specification
+                    "Specification-Version": "1", // We are version 1 of the modlauncher specification
                     "Implementation-Title": "Turtle Shell Drop",
                     "Implementation-Version": "${version}",
                     "Implementation-Vendor" : "The_Fireplace",
@@ -90,7 +90,7 @@ curseforge {
     id = '317174'
     changelog = file('changelog.txt')
     releaseType = 'release'
-    addGameVersion '1.13.2'
+    addGameVersion '1.14.4'
 	addGameVersion 'Java 8'
     mainArtifact(jar) {
         displayName = jar.archiveName.replace(".jar", "")
@@ -107,7 +107,7 @@ modsIO {
     project{
 		artifact = new File(jar.destinationDir, archivesBaseName+"-"+version+".jar")
 		modid = "1281"
-		minecraft = "1.13.2"
+		minecraft = "1.14.4"
 		try{changelog = file('changelog.txt').text}catch(Exception e){changelog=""}
 		tag = "alpha"
 		current = true

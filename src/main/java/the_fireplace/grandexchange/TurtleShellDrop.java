@@ -1,9 +1,9 @@
 package the_fireplace.grandexchange;
 
-import net.minecraft.entity.passive.EntityTurtle;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.passive.TurtleEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -31,8 +31,8 @@ public final class TurtleShellDrop {
     @SubscribeEvent
     public void livingDeath(LivingDeathEvent event) {
         if(!event.getEntityLiving().getEntityWorld().isRemote())
-            if(event.getEntityLiving() instanceof EntityTurtle)
-                if(cfg.dropWhenKilledByPlayer || !(event.getSource().getTrueSource() instanceof EntityPlayer))
+            if(event.getEntityLiving() instanceof TurtleEntity)
+                if(cfg.dropWhenKilledByPlayer || !(event.getSource().getTrueSource() instanceof PlayerEntity))
                     if(cfg.babyTurtleDrops || !event.getEntityLiving().isChild())
                         if(rand.nextDouble() <= cfg.shellDropChance)
                             event.getEntity().entityDropItem(new ItemStack(cfg.dropScute ? Items.SCUTE : Items.TURTLE_HELMET));

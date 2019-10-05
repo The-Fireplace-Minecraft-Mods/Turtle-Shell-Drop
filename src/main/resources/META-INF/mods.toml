@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[24,)"
 issueTrackerURL="https://github.com/The-Fireplace-Minecraft-Mods/Turtle-Shell-Drop/issues"
-displayURL="https://minecraft.curseforge.com/projects/turtle-shell-drop"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/turtle-shell-drop"
 credits="Thanks to Cojomax99 for the Tweet that made me think of the idea for this mod."
 authors="The_Fireplace"
 
@@ -16,12 +16,12 @@ Makes turtles drop their shells when they die.
 [[dependencies.turtleshelldrop]]
     modId="forge"
     mandatory=true
-    versionRange="[25,)"
+    versionRange="[28,)"
     ordering="NONE"
     side="SERVER"
 [[dependencies.turtleshelldrop]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.13.2,1.14)"
+    versionRange="[1.14,)"
     ordering="NONE"
     side="SERVER"
