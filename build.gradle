@@ -25,7 +25,7 @@ apply plugin: 'net.cazzar.gradle.modsio'
 
 version = "1.0.1"
 group = "the_fireplace.turtleshelldrop"
-archivesBaseName = "TurtleShellDrop-1.14.4"
+archivesBaseName = "TurtleShellDrop-1.15.1"
 
 allprojects {
     sourceCompatibility = 1.8
@@ -59,7 +59,7 @@ repositories {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
+	minecraft 'net.minecraftforge:forge:1.15.1-30.0.39'
 }
 
 jar {

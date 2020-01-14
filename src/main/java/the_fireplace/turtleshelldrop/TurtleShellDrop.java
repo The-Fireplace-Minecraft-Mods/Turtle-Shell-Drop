@@ -1,4 +1,4 @@
-package the_fireplace.grandexchange;
+package the_fireplace.turtleshelldrop;
 
 import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
