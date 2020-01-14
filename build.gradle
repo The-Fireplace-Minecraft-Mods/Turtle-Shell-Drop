@@ -90,6 +90,7 @@ curseforge {
     id = '317174'
     changelog = file('changelog.txt')
     releaseType = 'release'
+    addGameVersion '1.15.1'
     addGameVersion '1.14.4'
 	addGameVersion 'Java 8'
     mainArtifact(jar) {
@@ -107,7 +108,7 @@ modsIO {
     project{
 		artifact = new File(jar.destinationDir, archivesBaseName+"-"+version+".jar")
 		modid = "1281"
-		minecraft = "1.14.4"
+		minecraft = "1.15.1"
 		try{changelog = file('changelog.txt').text}catch(Exception e){changelog=""}
 		tag = "alpha"
 		current = true
