@@ -1,116 +1,148 @@
-buildscript {
-    repositories {
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "Modmuss50"
-            url = "http://maven.modmuss50.me/"
-        }
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'ModsIOUpload:ModsIOUpload:+'
-    }
-}
-
 plugins {
+    // Dependencies
+    id 'fabric-loom' version '0.5-SNAPSHOT'
+    // Mod Hosting Publish
     id "com.matthewprenger.cursegradle" version "1.4.0"
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'net.cazzar.gradle.modsio'
-
-version = "1.0.1"
-group = "the_fireplace.turtleshelldrop"
-archivesBaseName = "TurtleShellDrop-1.15.1"
-
-allprojects {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    id "com.modrinth.minotaur" version "1.1.0"
+    // Maven Publish
+    id "com.jfrog.bintray" version "1.8.4"
+    id "maven-publish"
+    id "java"
+    id "java-library"
 }
 
-minecraft {
-    mappings channel: 'stable', version: '53-1.14.2'
-    
-    runs {
-        client = {
-            // recommended logging data for a userdev environment
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            // recommended logging level for the console
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
-        }
-        server = {
-            // recommended logging data for a userdev environment
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            // recommended logging level for the console
-            properties 'forge.logging.console.level': 'info'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
-        }
-    }
-}
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-repositories {
-}
+archivesBaseName = project.archives_base_name
+version = "${project.mod_version}+${project.minecraft_version}"
+group = project.maven_group as String
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.15.1-30.0.39'
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+    modApi("me.shedaniel.cloth:config-2:${project.clothconfig_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+    include "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
+
+    compile "com.google.code.findbugs:jsr305:3.0.2"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include "fabric.mod.json"
+        expand "version": project.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "fabric.mod.json"
+    }
+}
+
+// ensure that the encoding is set to UTF-8, no matter what the system default is
+// this fixes some edge cases with special characters not displaying correctly
+// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+// if it is present.
+// If you remove this task, sources will not be generated.
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set("sources")
+    from sourceSets.main.allSource
 }
 
 jar {
-    manifest {
-        attributes(["Specification-Title": "turtleshelldrop",
-                    "Specification-Vendor": "The_Fireplace",
-                    "Specification-Version": "1", // We are version 1 of the modlauncher specification
-                    "Implementation-Title": "Turtle Shell Drop",
-                    "Implementation-Version": "${version}",
-                    "Implementation-Vendor" : "The_Fireplace",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
-    }
-}
-
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-}
-
-artifacts {
-    archives jar
-    archives deobfJar
+    from "LICENSE"
 }
 
 curseforge {
-  apiKey = project.hasProperty("curseForgeApiKey")? project.curseForgeApiKey : "empty"
-  project {
-    id = '317174'
-    changelog = file('changelog.txt')
-    releaseType = 'release'
-    addGameVersion '1.15.1'
-    addGameVersion '1.14.4'
-	addGameVersion 'Java 8'
-    mainArtifact(jar) {
-        displayName = jar.archiveName.replace(".jar", "")
+    apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : "empty"
+    project {
+        id = '317174'
+        changelog = file('changelog.txt')
+        releaseType = 'release'
+        addGameVersion project.minecraft_version
+        addGameVersion '1.16.4'
+        addGameVersion '1.16.3'
+        addGameVersion '1.16.2'
+        addGameVersion '1.16.1'
+        addGameVersion '1.16'
+        addGameVersion '1.15.2'
+        addGameVersion '1.15.1'
+        addGameVersion '1.15'
+        addGameVersion '1.14.4'
+        addGameVersion 'Java 8'
+        addGameVersion 'Fabric'
+        mainArtifact(new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")) {
+            displayName = "$archivesBaseName-$version"
+            relations {
+                requiredDependency 'fabric-api'
+                embeddedLibrary 'cloth-config'
+                embeddedLibrary 'auto-config-updated-api'
+                optionalDependency 'modmenu'
+            }
+        }
     }
-    addArtifact(deobfJar) {
-        displayName = deobfJar.archiveName.replace(".jar", "")
-        changelog = "*This is a file for mod developers. If you don't know what to do with it, don't use it!*"
+    options {
+        javaIntegration = false
+        forgeGradleIntegration = false
     }
-  }
 }
 
-modsIO {
-    key = project.hasProperty("modsioApiKey")? project.modsioApiKey : "empty"
-    project{
-		artifact = new File(jar.destinationDir, archivesBaseName+"-"+version+".jar")
-		modid = "1281"
-		minecraft = "1.15.1"
-		try{changelog = file('changelog.txt').text}catch(Exception e){changelog=""}
-		tag = "alpha"
-		current = true
+import com.modrinth.minotaur.TaskModrinthUpload
+
+task publishModrinth (type: TaskModrinthUpload) {
+    token = project.hasProperty("modrinthApiKey") ? project.modrinthApiKey : "empty"
+    projectId = '000000'
+    versionNumber = version
+    versionName = project.mod_version
+    uploadFile = jar // This is the java jar task
+    changelog = file('changelog.txt').getText()
+    releaseType = project.release_type
+    addGameVersion(project.minecraft_version as String)
+    addGameVersion('1.16.4')
+    addGameVersion('1.16.3')
+    addGameVersion('1.16.2')
+    addGameVersion('1.16.1')
+    addGameVersion('1.16')
+    addGameVersion('1.15.2')
+    addGameVersion('1.15.1')
+    addGameVersion('1.15')
+    addGameVersion('1.14.4')
+    addLoader('fabric')
+}
+
+bintray {
+    user = project.hasProperty("bintrayUser") ? project.bintrayUser : "empty"
+    key = project.hasProperty("bintrayApiKey") ? project.bintrayApiKey : "empty"
+    setPublications("mavenJava")
+    publish = true
+    pkg {
+        repo = "mc-mods"
+        name = "turtle-shell-drop"
+        licenses = ["GPL-2.0"]
+    }
+}
+
+def remapSourcesJar = tasks.getByName("remapSourcesJar")
+
+publishing {
+    publications {
+        mavenJava(MavenPublication.class) {
+            artifact(remapJar)
+            artifact(sourcesJar) {
+                builtBy(remapSourcesJar)
+            }
+        }
     }
 }

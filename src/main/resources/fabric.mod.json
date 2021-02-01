@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "turtleshelldrop",
+  "version": "${version}",
+
+  "name": "Turtle Shell Drop",
+  "description": "Makes turtles drop their shells when they die.",
+  "authors": [
+    "The_Fireplace"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/turtle-shell-drop",
+    "sources": "https://github.com/The-Fireplace-Minecraft-Mods/Turtle-Shell-Drop",
+    "issues": "https://github.com/The-Fireplace-Minecraft-Mods/Turtle-Shell-Drop/issues"
+  },
+
+  "license": "GPL-2.0",
+  "icon": "assets/turtleshelldrop/logo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "the_fireplace.turtleshelldrop.TurtleShellDrop"
+    ],
+    "modmenu": [
+      "the_fireplace.turtleshelldrop.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "turtleshelldrop.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.2",
+    "fabric": "*",
+    "minecraft": ">=1.13"
+  }
+}

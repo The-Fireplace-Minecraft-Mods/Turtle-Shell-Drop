@@ -1,0 +1,11 @@
+{
+  "text.autoconfig.turtleshelldrop.title": "Turtle Shell Drop Config",
+  "text.autoconfig.turtleshelldrop.option.shellDropChance": "Shell Drop Chance",
+  "text.autoconfig.turtleshelldrop.option.shellDropChance.@Tooltip": "Chance that a turtle shell will drop when a turtle is killed.",
+  "text.autoconfig.turtleshelldrop.option.dropWhenKilledByPlayer": "Drop When Killed By Player",
+  "text.autoconfig.turtleshelldrop.option.dropWhenKilledByPlayer.@Tooltip": "Drop shells when the turtle is killed directly by the player.",
+  "text.autoconfig.turtleshelldrop.option.dropScutes": "Drop Scutes",
+  "text.autoconfig.turtleshelldrop.option.dropScutes.@Tooltip": "Drop Scutes instead of Shells.",
+  "text.autoconfig.turtleshelldrop.option.babyTurtleDrops": "Baby Turtle Drops",
+  "text.autoconfig.turtleshelldrop.option.babyTurtleDrops.@Tooltip": "Allow drops from dead baby turtles."
+}
