@@ -1,10 +1,9 @@
 {
   "required": true,
-  "package": "the_fireplace.grandeconomy.mixin",
+  "package": "the_fireplace.turtleshelldrop.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "ServerPlayerEntityMixin",
-    "ServerWorldMixin"
+    "MobEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
