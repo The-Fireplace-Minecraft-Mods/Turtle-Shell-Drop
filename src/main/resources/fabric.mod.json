@@ -14,7 +14,7 @@
     "issues": "https://github.com/The-Fireplace-Minecraft-Mods/Turtle-Shell-Drop/issues"
   },
 
-  "license": "GPL-2.0",
+  "license": "MPL-2.0",
   "icon": "assets/turtleshelldrop/logo.png",
 
   "environment": "*",

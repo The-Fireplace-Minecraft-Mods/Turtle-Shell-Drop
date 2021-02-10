@@ -93,10 +93,6 @@ curseforge {
         addGameVersion '1.16.2'
         addGameVersion '1.16.1'
         addGameVersion '1.16'
-        addGameVersion '1.15.2'
-        addGameVersion '1.15.1'
-        addGameVersion '1.15'
-        addGameVersion '1.14.4'
         addGameVersion 'Java 8'
         addGameVersion 'Fabric'
         mainArtifact(new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")) {
@@ -131,10 +127,6 @@ task publishModrinth (type: TaskModrinthUpload) {
     addGameVersion('1.16.2')
     addGameVersion('1.16.1')
     addGameVersion('1.16')
-    addGameVersion('1.15.2')
-    addGameVersion('1.15.1')
-    addGameVersion('1.15')
-    addGameVersion('1.14.4')
     addLoader('fabric')
 }
 
@@ -146,7 +138,7 @@ bintray {
     pkg {
         repo = "mc-mods"
         name = "turtle-shell-drop"
-        licenses = ["GPL-2.0"]
+        licenses = ["MPL-2.0"]
     }
 }
 
